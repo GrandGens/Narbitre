@@ -2,7 +2,6 @@ package me.petitgens.narbitre;
 
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.requests.GatewayIntent;
@@ -47,14 +46,12 @@ public class BotDiscord extends ListenerAdapter {
 
         Message message = event.getMessage();
 
+        System.out.printf("%dh%d\n", message.getTimeCreated().getHour(), message.getTimeCreated().getMinute());
+
         if(message.getContentRaw().equals("nez")){
-            Date date = new Date(message.getTimeCreated().getDayOfMonth(),
-                    message.getTimeCreated().getMonthValue(),
-                    message.getTimeCreated().getYear());
-            int heure = message.getTimeCreated().getMinute();
-            User praticant = message.getAuthor();
+            ExpressionNasale expressionNasale = ExpressionNasale.fromMessage(message);
             try {
-                compteurNez.ajouterExpression(date, heure, praticant);
+                compteurNez.ajouterExpression(expressionNasale, message.getAuthor());
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -62,6 +59,15 @@ public class BotDiscord extends ListenerAdapter {
 
         else if(message.getContentRaw().equals("!classement")){
             message.getChannel().sendMessage(compteurNez.classement()).queue();
+            System.out.println(compteurNez.classement());
+        }
+
+        else if(message.getContentRaw().equals("!recompter")){
+            try {
+                compteurNez.recompter(message.getChannel());
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 }

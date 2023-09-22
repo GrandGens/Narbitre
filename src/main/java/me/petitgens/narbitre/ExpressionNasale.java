@@ -1,7 +1,10 @@
 package me.petitgens.narbitre;
 
+import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.User;
 
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Objects;
 
 public class ExpressionNasale {
@@ -27,5 +30,14 @@ public class ExpressionNasale {
         this.date = date;
         this.heure = heure;
         this.userId = userId;
+    }
+
+    public static ExpressionNasale fromMessage(Message message){
+        ZonedDateTime localTime = message.getTimeCreated().atZoneSameInstant(ZoneId.systemDefault());
+        Date date = new Date(localTime.getDayOfMonth(), localTime.getMonthValue(), localTime.getYear());
+        int heure = message.getTimeCreated().getMinute();
+        User praticant = message.getAuthor();
+
+        return new ExpressionNasale(date, heure, praticant.getId());
     }
 }
