@@ -9,8 +9,6 @@ import net.dv8tion.jda.api.requests.GatewayIntent;
 import java.io.IOException;
 
 public class BotDiscord extends ListenerAdapter {
-
-    private static final String TOKEN = "MTE1NDQ1MDU2OTgwNTcwNTI0Ng.GRmAOG.2eORdpT7vieXi89TLQw00iu7Lh2aj_jKXU-PpI";
     private static final String EXPRESSIONS_CSV_PATH = "expressions.csv";
     private static final String PRATICANT_CSV_PATH = "praticants.csv";
 
@@ -18,8 +16,10 @@ public class BotDiscord extends ListenerAdapter {
     private final CompteurNez compteurNez;
 
     public static void main(String[] args){
+        String token = args[0];
+
         try{
-            JDABuilder.createDefault(TOKEN)
+            JDABuilder.createDefault(token)
                 .enableIntents(GatewayIntent.MESSAGE_CONTENT)
                 //.setActivity(Activity.playing("compter des nez"))
                 .addEventListeners(new BotDiscord())
